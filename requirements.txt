@@ -1,6 +1,6 @@
 requests
 fastapi
 argparse
-yaml
+pyyaml
 openai
 numpy
