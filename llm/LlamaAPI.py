@@ -26,7 +26,7 @@
 from typing import Iterator
 import json
 from openai import OpenAI
-from Interface import llm_interface
+from .Interface import llm_interface
 
 class llm_api(llm_interface):
     def __init__(
@@ -34,14 +34,14 @@ class llm_api(llm_interface):
         llm_url: str,
         model: str,
         system: str,
-        callback = print, # [DeBug] [LlmAPI] | 
+        # callback = print, # [DeBug] [LlmAPI] | 
         api_key: str = "None",):
 
         self.llm_url = llm_url
         self.model = model
         self.api_key = api_key
         self.system = system
-        self.callback = callback
+        self.callback = self.constom_callback
         self.memory = []
 
         self.client = OpenAI(
@@ -49,7 +49,7 @@ class llm_api(llm_interface):
             api_key=self.api_key
         )
         self.__set_system(self.system)
-        self.callback("client init")
+        self.callback("llm init")
 
     def __set_system(self, system):
         """
@@ -75,6 +75,7 @@ class llm_api(llm_interface):
         )
         response = []
         try:
+            self.callback(f'User Input: {prompt}')
             response = self.client.chat.completions.create(
                 messages=self.memory,
                 model=self.model,
@@ -145,6 +146,10 @@ class llm_api(llm_interface):
                 "content": "[Interrupted by user]",
             }
         )
+    
+    def constom_callback(self, msg):
+        print(f"[DeBug] [LlmAPI] | {msg}")
+        
 def callback(msg):
     print(f"[DeBug] [LlmAPI] | {msg}")
 
@@ -154,7 +159,8 @@ if __name__ == "__main__":
         llm_url="http://localhost:11434/v1",
         model="llama3:latest",
         system='You are a sarcastic AI chatbot who loves to the jokes "Get out and touch some grass" 愛說中文',
-        callback=callback,)
+        # callback=callback,
+        )
     print("\n(Press Ctrl+C to exit.)")
     while True:
         

@@ -1,0 +1,8 @@
+# ======================== Server ========================
+PORT: 52696
+
+#  ============== LLM Backend Settings ===================
+
+LLM_URL: "http://localhost:11434/v1/"
+API_KEY: "your openai apikey"
+MODEL: "llama3:latest"
