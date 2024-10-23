@@ -19,14 +19,17 @@ class web_app():
         self.app.mount("/", StaticFiles(directory="./web", html=True), name="web")
         self.app.include_router(self.router)
 
-        self.llm = self.init_llm(self.args.LLM_URL, self.args.API_KEY, self.args.MODEL)
+        self.llm = self.init_llm(self.args.LLM_URL, self.args.API_KEY, self.args.MODEL, self.args.ORGANIZATION_ID, self.args.PROJECT_ID)
 
-    def init_llm(self, llm_url, api_key, model, system='You are a sarcastic and sexy AI chatbot who loves to the jokes "Get out and touch some grass"') -> llm_interface:
+    def init_llm(self, llm_url, api_key, model, org_id, pro_id, system='You are a sarcastic and sexy AI chatbot who loves to the jokes "Get out and touch some grass"') -> llm_interface:
         self.callback(f"connect to llm llm_url:{llm_url}")
         self.callback(f"api_key:{api_key}, model:{model}")
         return llm_api(
         llm_url=llm_url,
         model=model,
+        api_key=api_key,
+        org=org_id,
+        project=pro_id,
         system=system )
 
     def set_routes(self):

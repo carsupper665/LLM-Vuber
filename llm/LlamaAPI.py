@@ -25,6 +25,7 @@
 
 from typing import Iterator
 import json
+import openai
 from openai import OpenAI
 from .Interface import llm_interface
 
@@ -35,19 +36,42 @@ class llm_api(llm_interface):
         model: str,
         system: str,
         # callback = print, # [DeBug] [LlmAPI] | 
+        org: str = "None",
+        project: str = "None",
         api_key: str = "None",):
+        import requests
 
         self.llm_url = llm_url
+        self.llm_url += 'v1/'
+        
         self.model = model
-        self.api_key = api_key
         self.system = system
         self.callback = self.constom_callback
         self.memory = []
 
-        self.client = OpenAI(
-            base_url=self.llm_url,
-            api_key=self.api_key
-        )
+        try:
+            re = requests.get(llm_url)
+            if re.status_code == 200:
+                self.callback(f'Post status code: {re.status_code}')
+                self.callback(f'url:{self.llm_url}')
+                
+                self.client= OpenAI(base_url=self.llm_url, api_key=api_key)
+            else:
+                self.callback(f'connect error: {re.status_code}')
+        except requests.exceptions.RequestException as e:
+            self.callback(f"post error: {e}")
+            self.callback(f'Ollama is not running')
+            self.callback(f'Use OpenAI')
+            self.callback(f'api_key:{api_key}')
+            self.callback(f'model:{model}')
+            self.callback(f'org id:{org}')
+            self.callback(f'project id:{project}')
+            self.client = OpenAI(
+                api_key=api_key,
+                organization=org,
+                project=project
+            )
+        
         self.__set_system(self.system)
         self.callback("llm init")
 
