@@ -5,6 +5,6 @@ PORT: 52696
 # LLM_URL: "http://localhost:11434/v1/"
 LLM_URL: "http://localhost:11434/"
 API_KEY: "key"
-ORGANIZATION_ID: "org_id
-PROJECT_ID: "proj_id"
+ORGANIZATION_ID: "org id"
+PROJECT_ID: "proj id"
 MODEL: "llama3:latest" 
