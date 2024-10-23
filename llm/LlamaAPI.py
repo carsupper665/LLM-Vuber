@@ -58,6 +58,17 @@ class llm_api(llm_interface):
                 self.client= OpenAI(base_url=self.llm_url, api_key=api_key)
             else:
                 self.callback(f'connect error: {re.status_code}')
+                self.callback(f'Ollama is not running')
+                self.callback(f'Use OpenAI')
+                self.callback(f'api_key:{api_key}')
+                self.callback(f'model:{model}')
+                self.callback(f'org id:{org}')
+                self.callback(f'project id:{project}')
+                self.client = OpenAI(
+                api_key=api_key,
+                organization=org,
+                project=project
+            )
         except requests.exceptions.RequestException as e:
             self.callback(f"post error: {e}")
             self.callback(f'Ollama is not running')
