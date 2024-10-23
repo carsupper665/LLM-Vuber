@@ -1,0 +1,10 @@
+# ======================== Server ========================
+PORT: 52696
+
+#  ============== LLM Backend Settings ===================
+# LLM_URL: "http://localhost:11434/v1/"
+LLM_URL: "http://localhost:11434/"
+API_KEY: "key"
+ORGANIZATION_ID: "org id"
+PROJECT_ID: "proj id"
+MODEL: "llama3:latest" 

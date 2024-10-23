@@ -1,0 +1,6 @@
+requests
+fastapi
+argparse
+yaml
+openai
+numpy
