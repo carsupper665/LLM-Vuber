@@ -7,3 +7,6 @@ def blessing():
         file_content = file.read()
     
     print(f'{color[random.randint(0, len(color)-1)]}{file_content}{w}')
+
+if __name__ == "__main__":
+    blessing()
