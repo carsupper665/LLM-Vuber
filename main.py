@@ -3,6 +3,8 @@ from fastapi import FastAPI, WebSocket, APIRouter
 from fastapi.staticfiles import StaticFiles
 from llm.Interface import llm_interface
 from llm.LlamaAPI import llm_api
+from tts.tts import tts
+from scripts.FileBlesser import blessing
 import uvicorn
 import argparse
 import yaml
@@ -16,10 +18,14 @@ class web_app():
 
         # connect to index.html
         self.set_routes()
+
         self.app.mount("/", StaticFiles(directory="./web", html=True), name="web")
+        self.app.mount("/", StaticFiles(directory="./audio"), name="audio")
+
         self.app.include_router(self.router)
 
-        self.llm = self.init_llm(self.args.LLM_URL, self.args.API_KEY, self.args.MODEL, self.args.ORGANIZATION_ID, self.args.PROJECT_ID)
+        self.llm = self.init_llm(self.args.llm_url, self.args.api_key, self.args.model, self.args.organization_id, self.args.project_id)
+        self.tts = self.init_tts(self.args.tts_mode, self.args.edge)
 
     def init_llm(self, llm_url, api_key, model, org_id, pro_id, system='You are a sarcastic and sexy AI chatbot who loves to the jokes "Get out and touch some grass"') -> llm_interface:
         self.callback(f"connect to llm llm_url:{llm_url}")
@@ -31,6 +37,10 @@ class web_app():
         org=org_id,
         project=pro_id,
         system=system )
+    
+    def init_tts(self, tts_type, config):
+        self.callback(f'TTS type: {tts_type}. Config: {config}')
+        return tts.init(tts_type=tts_type, **config)
 
     def set_routes(self):
         @self.app.websocket("/llm-ws")    
@@ -50,6 +60,10 @@ class web_app():
                         if chunk:
                             text += chunk
 
+                    self.tts.generate_audio(str(text))
+
+                    await websocket.send_text(f"Audio file: ./audio/tts_audio.mp3")
+
                     print(f"[DeBug] [WebSocket] | Response: {text}")
 
                     await websocket.send_text(f"Message res: {text}")
@@ -67,8 +81,11 @@ class web_app():
         print(f'[DeBug] [WebSocket] | {msg}')
 
     def start_server(self):
-        uvicorn.run(self.app, host="127.0.0.1", port=self.args.PORT)
+        uvicorn.run(self.app, host="127.0.0.1", port=self.args.port)
 
 if __name__ == "__main__":
     run = web_app()
     run.start_server()
+
+    if run.args.bless:
+        blessing()

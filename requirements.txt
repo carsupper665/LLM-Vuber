@@ -6,3 +6,5 @@ openai
 numpy
 fastapi
 uvicorn
+edge-tts
+pathlib

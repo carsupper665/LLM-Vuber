@@ -7,11 +7,13 @@
 </head>
 <body>
     <h1>WebSocket Client</h1>
+    <audio id="audioPlayer" controls></audio>
     <p >Send Message To AI Vtuber</p>
     <button id="sendButton">Send Message</button>
     <p id="response"></p>
 
     <script type="text/javascript">
+        
         var ws = new WebSocket("/llm-ws");
 
         ws.onopen = function(event) {
@@ -20,6 +22,12 @@
 
         ws.onmessage = function(event) {
             document.getElementById("response").innerText = event.data;
+
+            if (event.data.startsWith("Audio file: ")) {
+                var audioFilePath = event.data.replace("Audio file: ", "");
+                document.getElementById("audioPlayer").src = audioFilePath;
+                document.getElementById("audioPlayer").play();
+            }
         };
 
         document.getElementById("sendButton").onclick = function() {
