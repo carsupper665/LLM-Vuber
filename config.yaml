@@ -13,4 +13,10 @@ edge:
   voice: "en-US-EmmaNeural"
   pitch: "+10Hz"
  
-bless: True
+bless: False
+
+# 如果要新cfg按照這個格式
+# 新的種類:
+#   新的設定: "新的值"
+#   新的設定2: "新的值"
+# 阿如果只有一個就不用了
