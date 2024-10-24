@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from llm.Interface import llm_interface
 from llm.LlamaAPI import llm_api
 from tts.tts import tts
-from scripts.FileBlesser import blessing
+from scripts.PorjectBlesser import blessing
 import uvicorn
 import argparse
 import yaml
