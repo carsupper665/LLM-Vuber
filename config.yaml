@@ -1,10 +1,16 @@
 # ======================== Server ========================
-PORT: 52696
-
+port: 52696
 #  ============== LLM Backend Settings ===================
 # LLM_URL: "http://localhost:11434/v1/"
-LLM_URL: "http://localhost:11434/"
-API_KEY: "key"
-ORGANIZATION_ID: "org id"
-PROJECT_ID: "proj id"
-MODEL: "llama3:latest" 
+llm_url: "http://localhost:11434/"
+api_key: "key"
+organization_id: "org id"
+project_id: "proj id"
+model: "llama3:latest" 
+# ===================== TTS Settings ====================== 
+tts_mode: "edgeTTS"
+edge:
+  voice: "en-US-EmmaNeural"
+  pitch: "+10Hz"
+ 
+bless: True
